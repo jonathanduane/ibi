@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBI Stations</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://ibireland.ie/wp-content/uploads/2023/04/Rectangle-118.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+            overscroll-behavior: none;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        h1 {
+            text-align: center;
+            font-size: clamp(1.5em, 5vw, 2.5em);
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .radio-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .radio-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .radio-card:nth-child(1) { animation-delay: 0.1s; }
+        .radio-card:nth-child(2) { animation-delay: 0.15s; }
+        .radio-card:nth-child(3) { animation-delay: 0.2s; }
+        .radio-card:nth-child(n+4) { animation-delay: calc(0.05s * var(--n)); }
+        .radio-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 123, 255, 0.5);
+            background: rgba(255, 255, 255, 1);
+        }
+        .radio-card.playing {
+            background: rgba(220, 255, 220, 0.95);
+        }
+        .radio-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+            padding: 10px;
+            background: #f0f0f0;
+            border-bottom: 1px solid #ddd;
+            transition: opacity 0.3s ease;
+        }
+        .radio-card:hover img {
+            opacity: 0.9;
+        }
+        .radio-card .station-name {
+            padding: 8px;
+            font-size: clamp(0.9em, 3vw, 1.1em);
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+        }
+        .radio-card.playing .station-name::after {
+            content: '';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 8px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMTAiIHZpZXdCb3g9IjAgMCAyMCAxMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMiA1QzIgNy43NjEgNC4yMzkgMTAgNyA1QzkuNzYxIDAgMTIgMi4yMzkxIDE0IDVDMTYuNzYxIDEwIDE5IDcuNzYxIDE5IDUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI4YTc0NSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWRhc2hhcnJheT0iMiIgYW5pbWF0aW9uPSJ3YXZlIDJzIGluZmluaXRlIi8+Cjwvc3ZnPgo8c3R5bGU+CiAgQGtleWZyYW1lcyB3YXZlIHsKICAgIDAlIHsgc3Ryb2tlLWRhc2hvZmZzZXQ6IDA7IH0KICAgIDEwMCUgeyBzdHJva2UtZGFzaG9mZnNldDogMjA7IH0KICB9Cjwvc3R5bGU+') no-repeat;
+            background-size: contain;
+            animation: wave 2s infinite;
+        }
+        .radio-card .play-btn {
+            width: clamp(40px, 10vw, 50px);
+            height: clamp(40px, 10vw, 50px);
+            margin: 8px auto 10px;
+            background: linear-gradient(45deg, #007bff, #00c4ff);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+        }
+        .radio-card .play-btn:hover {
+            background: linear-gradient(45deg, #0056b3, #0099cc);
+            transform: translateY(-2px) rotate(5deg);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.6);
+        }
+        .radio-card.playing .play-btn {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4), 0 0 0 0 rgba(0, 123, 255, 0.5); }
+            50% { box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4), 0 0 10px 5px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4), 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+        .radio-card .play-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-40%, -50%) scale(1);
+            width: 0;
+            height: 0;
+            border-left: clamp(10px, 3vw, 15px) solid white;
+            border-top: clamp(6px, 2vw, 10px) solid transparent;
+            border-bottom: clamp(6px, 2vw, 10px) solid transparent;
+            transition: all 0.3s ease;
+        }
+        .radio-card.playing .play-btn::before {
+            width: clamp(4px, 1.5vw, 6px);
+            height: clamp(12px, 4vw, 16px);
+            border: none;
+            border-left: clamp(4px, 1.5vw, 6px) solid white;
+            border-right: clamp(4px, 1.5vw, 6px) solid white;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        .radio-card audio {
+            display: none;
+        }
+        .status {
+            font-size: clamp(0.8em, 2.5vw, 0.9em);
+            color: #666;
+            padding: 5px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .radio-card.playing .status {
+            color: #28a745;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: clamp(20px, 5vw, 24px);
+            cursor: pointer;
+            color: #333;
+        }
+        .modal h2 {
+            font-size: clamp(1.2em, 4vw, 1.5em);
+            margin: 10px 0;
+        }
+        .modal img {
+            width: 100%;
+            height: auto;
+            max-height: 120px;
+            object-fit: contain;
+            padding: 10px;
+        }
+        .custom-audio-player {
+            margin-top: 15px;
+            width: 100%;
+        }
+        .custom-audio-player audio {
+            display: block;
+            width: 100%;
+            outline: none;
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 5px;
+            height: 40px;
+        }
+        .custom-audio-player audio::-webkit-media-controls-panel {
+            background: linear-gradient(45deg, #007bff, #00c4ff);
+            border-radius: 10px;
+            padding: 5px;
+        }
+        .custom-audio-player audio::-webkit-media-controls-play-button,
+        .custom-audio-player audio::-webkit-media-controls-volume-slider,
+        .custom-audio-player audio::-webkit-media-controls-current-time-display,
+        .custom-audio-player audio::-webkit-media-controls-time-remaining-display {
+            filter: brightness(1.2);
+        }
+        .custom-audio-player audio::-webkit-media-controls-timeline {
+            background: linear-gradient(to right, #28a745, #00c4ff);
+            border-radius: 5px;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .radio-board {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 10px;
+            }
+            .radio-card img {
+                height: 80px;
+                padding: 8px;
+            }
+            .radio-card .station-name {
+                padding: 6px;
+            }
+            .radio-card .play-btn {
+                margin: 6px auto 8px;
+            }
+            .status {
+                padding: 3px;
+            }
+            .modal-content {
+                padding: 10px;
+            }
+            .custom-audio-player {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>IBI Stations</h1>
+    <div class="radio-board">
+        <div class="radio-card" data-stream="https://stream.audioxi.com/NT" data-slug="newstalk" style="--n: 1;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/Lockup_Raspberry-1.png" alt="Newstalk Logo">
+            <div class="station-name">Newstalk</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/NT" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/TFM" data-slug="today-fm" style="--n: 2;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/TDFM-LOGO-MAIN.png" alt="Today FM Logo">
+            <div class="station-name">Today FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/TFM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/BEAT" data-slug="beat-102-103" style="--n: 3;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Beat-1.png" alt="Beat 102 103 Logo">
+            <div class="station-name">Beat 102 103</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/BEAT" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/IRADIO" data-slug="iradio" style="--n: 4;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/iRadio.png" alt="iRadio Logo">
+            <div class="station-name">iRadio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/IRADIO" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/SPINSW" data-slug="spin-south-west" style="--n: 5;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/08/SPINSW-LOCKUP_MAIN.png" alt="SPIN South West Logo">
+            <div class="station-name">SPIN South West</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/SPINSW" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/CHR" data-slug="classic-hits-radio" style="--n: 6;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Classic-Hits-FM.png" alt="Ireland's Classic Hits Radio Logo">
+            <div class="station-name">Ireland's Classic Hits Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/CHR" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/SPIRIT" data-slug="spirit-radio" style="--n: 7;">
+            <img src="https://www.spiritradio.ie/wp-content/uploads/2019/01/sr_logo.png" alt="Spirit Radio Logo">
+            <div class="station-name">Spirit Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/SPIRIT" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/DCR" data-slug="98fm" style="--n: 8;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/98-FM.png" alt="98FM Logo">
+            <div class="station-name">98FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/DCR" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/FM104" data-slug="fm104" style="--n: 9;">
+            <img src="https://mmo.aiircdn.com/301/63435a48d085e.png" alt="FM104 Logo">
+            <div class="station-name">FM104</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/FM104" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/Q102" data-slug="q102" style="--n: 10;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Dublins-Q102.png" alt="Q102 Logo">
+            <div class="station-name">Q102</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/Q102" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://edge.audioxi.com/NOVA" data-slug="radio-nova" style="--n: 11;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Nova.png" alt="Radio Nova Logo">
+            <div class="station-name">Radio Nova</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://edge.audioxi.com/NOVA" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/SPIN" data-slug="spin-1038" style="--n: 12;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/Spin-Logo-main.png" alt="SPIN 1038 Logo">
+            <div class="station-name">SPIN 1038</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/SPIN" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/SUNSHINE" data-slug="sunshine-106-8" style="--n: 13;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Sunshine.png" alt="Sunshine 106.8 Logo">
+            <div class="station-name">Sunshine 106.8</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/SUNSHINE" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/C103" data-slug="c103" style="--n: 14;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/C103.png" alt="C103 Logo">
+            <div class="station-name">C103</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/C103" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/96FM" data-slug="corks-96fm" style="--n: 15;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Corks-96FM.png" alt="Cork's 96FM Logo">
+            <div class="station-name">Cork's 96FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/96FM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/REDFM" data-slug="red-fm" style="--n: 16;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Corks-Red-FM.png" alt="Red FM Logo">
+            <div class="station-name">Red FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/REDFM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://streamer.galwaybayfm.ie/gbfmlive" data-slug="galway-bay-fm" style="--n: 17;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Galway-Bay.png" alt="Galway Bay FM Logo">
+            <div class="station-name">Galway Bay FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://streamer.galwaybayfm.ie/gbfmlive" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://stream.midwestradio.ie/mwr" data-slug="midwest-radio" style="--n: 18;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Midwest-Radio.png" alt="MidWest Radio Logo">
+            <div class="station-name">MidWest Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://stream.midwestradio.ie/mwr" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/OCEANFM" data-slug="ocean-fm" style="--n: 19;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Ocean-FM.png" alt="Ocean FM Logo">
+            <div class="station-name">Ocean FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/OCEANFM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/SIDE" data-slug="shannonside-fm" style="--n: 20;">
+            <img src="https://img.resized.co/shannonside-ie/eyJkYXRhIjoie1widXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5zaGFubm9uc2lkZS5pZVxcXC9pbWFnZXNcXFwvbm8taW1hZ2UucG5nXCIsXCJ3aWR0aFwiOjEyMDAsXCJoZWlnaHRcIjo2MjcsXCJkZWZhdWx0XCI6XCJodHRwczpcXFwvXFxcL2ltYWdlcy51bnNwbGFzaC5jb21cXFwvcGhvdG8tMTU4NjMzOTk0OTkxNi0zZTk0NTdiZWY2ZDNcIixcIm9wdGlvbnNcIjpbXX0iLCJoYXNoIjoiZTg5MzZhY2NmYWI3NGRmYjVlYTZmZGNiZjg4NWY4YzkxOTNkMGNiOCJ9/broadcasting-to-the-border-counties-midlands-and-west-shannonside-northern-sound.png" alt="Shannonside FM Logo">
+            <div class="station-name">Shannonside FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/SIDE" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/ECFM" data-slug="east-coast-fm" style="--n: 21;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/East-Coast-FM.png" alt="East Coast FM Logo">
+            <div class="station-name">East Coast FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/ECFM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/KCLR" data-slug="kclr-96fm" style="--n: 22;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/KCLR.png" alt="KCLR 96FM Logo">
+            <div class="station-name">KCLR 96FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/KCLR" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/KFM" data-slug="kfm" style="--n: 23;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/Kfm-Logo-High-Res-scaled.jpg" alt="Kfm Logo">
+            <div class="station-name">Kfm</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/KFM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/LMFM" data-slug="lmfm" style="--n: 24;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/LMFM.png" alt="LMFM Logo">
+            <div class="station-name">LMFM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/LMFM" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/MID103" data-slug="midlands-103" style="--n: 25;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Midlands-103.png" alt="Midlands 103 Logo">
+            <div class="station-name">Midlands 103</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/MID103" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/SER" data-slug="south-east-radio" style="--n: 26;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/South-East-Radio.png" alt="South East Radio Logo">
+            <div class="station-name">South East Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/SER" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/CLARE" data-slug="clare-fm" style="--n: 27;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/CLare-FM.png" alt="Clare FM Logo">
+            <div class="station-name">Clare FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/CLARE" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/LIVE95" data-slug="live-95" style="--n: 28;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/08/Live-95-Logo-600-x-600.png" alt="Live 95 Logo">
+            <div class="station-name">Live 95</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/LIVE95" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/KERRY" data-slug="radio-kerry" style="--n: 29;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Radio-Kerry.png" alt="Radio Kerry Logo">
+            <div class="station-name">Radio Kerry</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/KERRY" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/TIPP" data-slug="tipp-fm" style="--n: 30;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Tipp-FM.png" alt="Tipp FM Logo">
+            <div class="station-name">Tipp FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/TIPP" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/WLR" data-slug="wlr-fm" style="--n: 31;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/09/WLR-logo.png" alt="WLR FM Logo">
+            <div class="station-name">WLR FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/WLR" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/HIGHLAND" data-slug="highland-radio" style="--n: 32;">
+            <img src="https://ibireland.ie/wp-content/uploads/2023/05/Highland-Radio.png" alt="Highland Radio Logo">
+            <div class="station-name">Highland Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/HIGHLAND" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.audioxi.com/NSOUND" data-slug="northern-sound" style="--n: 33;">
+            <img src="https://www.northernsound.ie/images/logo_2x.png" alt="Northern Sound Logo">
+            <div class="station-name">Northern Sound</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.audioxi.com/NSOUND" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://securestreams5.autopo.st:1894/mp3" data-slug="dundalk-fm" style="--n: 34;">
+            <img src="https://via.placeholder.com/200x120?text=Dundalk+FM+Logo" alt="Dundalk FM Logo">
+            <div class="station-name">Dundalk FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://securestreams5.autopo.st:1894/mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://stream.laut.fm/dublinsouthfm" data-slug="dublin-south-fm" style="--n: 35;">
+            <img src="https://via.placeholder.com/200x120?text=Dublin+South+FM+Logo" alt="Dublin South FM Logo">
+            <div class="station-name">Dublin South FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://stream.laut.fm/dublinsouthfm" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://radio.canstream.co.uk:8009/live.mp3" data-slug="near-fm" style="--n: 36;">
+            <img src="https://via.placeholder.com/200x120?text=Near+FM+Logo" alt="Near FM Logo">
+            <div class="station-name">Near FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://radio.canstream.co.uk:8009/live.mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://stream.laut.fm/raidio-na-life" data-slug="raidio-na-life" style="--n: 37;">
+            <img src="https://via.placeholder.com/200x120?text=Raidió+na+Life+Logo" alt="Raidió na Life Logo">
+            <div class="station-name">Raidió na Life</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://stream.laut.fm/raidio-na-life" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://stream.laut.fm/liffeysoundfm" data-slug="liffey-sound-fm" style="--n: 38;">
+            <img src="https://via.placeholder.com/200x120?text=Liffey+Sound+FM+Logo" alt="Liffey Sound FM Logo">
+            <div class="station-name">Liffey Sound FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://stream.laut.fm/liffeysoundfm" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://stream.laut.fm/flirtfm" data-slug="flirt-fm" style="--n: 39;">
+            <img src="https://via.placeholder.com/200x120?text=Flirt+FM+Logo" alt="Flirt FM Logo">
+            <div class="station-name">Flirt FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://stream.laut.fm/flirtfm" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://stream.wiredfm.ie:8000/wiredfm" data-slug="wired-fm" style="--n: 40;">
+            <img src="https://via.placeholder.com/200x120?text=Wired+FM+Logo" alt="Wired FM Logo">
+            <div class="station-name">Wired FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://stream.wiredfm.ie:8000/wiredfm" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/radio1" data-slug="rte-radio-1" style="--n: 41;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-radio-1/list_45.jpg" alt="RTÉ Radio 1 Logo">
+            <div class="station-name">RTÉ Radio 1</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/radio1" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/2fm" data-slug="rte-2fm" style="--n: 42;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-2fm/list_45.jpg" alt="RTÉ 2FM Logo">
+            <div class="station-name">RTÉ 2FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/2fm" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/rnag" data-slug="raidio-na-gaeltachta" style="--n: 43;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/raidio-na-gaeltachta/list_45.jpg" alt="Raidió na Gaeltachta Logo">
+            <div class="station-name">Raidió na Gaeltachta</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/rnag" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/lyric" data-slug="rte-lyric-fm" style="--n: 44;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-lyric-fm/list_45.jpg" alt="RTÉ Lyric FM Logo">
+            <div class="station-name">RTÉ Lyric FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/lyric" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/gold" data-slug="rte-gold" style="--n: 45;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-gold/list_45.jpg" alt="RTÉ Gold Logo">
+            <div class="station-name">RTÉ Gold</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/gold" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/pulse" data-slug="rte-pulse" style="--n: 46;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-pulse/list_45.jpg" alt="RTÉ Pulse Logo">
+            <div class="station-name">RTÉ Pulse</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/pulse" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/junior" data-slug="rte-junior" style="--n: 47;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-junior/list_45.jpg" alt="RTÉ Junior Logo">
+            <div class="station-name">RTÉ Junior</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/junior" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://icecast.rte.ie/radio1extra" data-slug="rte-radio-1-extra" style="--n: 48;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-radio-1-extra/list_45.jpg" alt="RTÉ Radio 1 Extra Logo">
+            <div class="station-name">RTÉ Radio 1 Extra</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://icecast.rte.ie/radio1extra" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="http://icecast2.rte.ie/2xm" data-slug="rte-2xm" style="--n: 49;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/rte-2xm/list_45.jpg" alt="RTÉ 2XM Logo">
+            <div class="station-name">RTÉ 2XM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="http://icecast2.rte.ie/2xm" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://christmasfm.cdnstream1.com/2547_128.mp3" data-slug="christmas-fm" style="--n: 50;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/christmas-fm/list_45.png" alt="Christmas FM Logo">
+            <div class="station-name">Christmas FM</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://christmasfm.cdnstream1.com/2547_128.mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://s3.radio.co/s05b500bb8/listen" data-slug="global-irish-radio" style="--n: 51;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/global-irish-radio/list_45.jpg" alt="Global Irish Radio Logo">
+            <div class="station-name">Global Irish Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://s3.radio.co/s05b500bb8/listen" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://stream.rcs.revma.com/ng2u4zvag5uvv" data-slug="eirewave" style="--n: 52;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/eirewave-radio/list_45.jpg" alt="Eirewave Logo">
+            <div class="station-name">Eirewave</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://stream.rcs.revma.com/ng2u4zvag5uvv" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://edge.audioxi.com/8RADIO" data-slug="8radio" style="--n: 53;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/8radio/list_45.jpg" alt="8Radio Logo">
+            <div class="station-name">8Radio</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://edge.audioxi.com/8RADIO" type="audio/mpeg"></audio>
+        </div>
+        <div class="radio-card" data-stream="https://dreamsiteradiocp2.com/proxy/rmirlanda2?mp=/stream" data-slug="radio-maria-ireland" style="--n: 54;">
+            <img src="https://irishradiolive.com/public/uploads/radio_img/radio-maria-ireland/list_45.jpg" alt="Radio Maria Ireland Logo">
+            <div class="station-name">Radio Maria Ireland</div>
+            <button class="play-btn"></button>
+            <div class="status">Stopped</div>
+            <audio preload="none"><source src="https://dreamsiteradiocp2.com/proxy/rmirlanda2?mp=/stream" type="audio/mpeg"></audio>
+        </div>
+    </div>
+
+    <div class="modal" id="stationModal">
+        <div class="modal-content">
+            <span class="modal-close">×</span>
+            <h2 id="modalStationName"></h2>
+            <img id="modalStationImg" src="" alt="">
+            <div class="custom-audio-player">
+                <audio id="modalAudio" controls><source src="" type="audio/mpeg"></audio>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const radioCards = document.querySelectorAll('.radio-card');
+        const modal = document.getElementById('stationModal');
+        const modalStationName = document.getElementById('modalStationName');
+        const modalStationImg = document.getElementById('modalStationImg');
+        const modalAudio = document.getElementById('modalAudio');
+        const modalClose = document.querySelector('.modal-close');
+        let currentAudio = null;
+        let hoverTimeout = null;
+
+        const schedules = {
+            "newstalk": [
+                { start: "18:00", end: "22:00", program: "Talking History with Patrick Geoghegan" },
+                { start: "22:00", end: "23:59", program: "The Sunday Show" }
+            ],
+            "today-fm": [
+                { start: "19:00", end: "22:00", program: "The Paul McLoone Show" },
+                { start: "22:00", end: "23:59", program: "Across the Line" }
+            ],
+            "beat-102-103": [
+                { start: "18:00", end: "22:00", program: "Beat's Most Wanted" },
+                { start: "22:00", end: "23:59", program: "Late Night Beats" }
+            ],
+            "iradio": [
+                { start: "19:00", end: "22:00", program: "iLoveIrish with Tara" },
+                { start: "22:00", end: "23:59", program: "iRadio Nights" }
+            ],
+            "spin-south-west": [
+                { start: "18:00", end: "23:59", program: "Hit Music Now" }
+            ],
+            "classic-hits-radio": [
+                { start: "19:00", end: "22:00", program: "Classic Hits Sunday" },
+                { start: "22:00", end: "23:59", program: "Late Night Classics" }
+            ],
+            "spirit-radio": [
+                { start: "18:00", end: "23:59", program: "Spirit Music Mix" }
+            ],
+            "98fm": [
+                { start: "19:00", end: "22:00", program: "98FM Dance with Ben Murray" },
+                { start: "22:00", end: "23:59", program: "Late Night 98FM" }
+            ],
+            "fm104": [
+                { start: "18:00", end: "23:59", program: "FM104 Music Mix" }
+            ],
+            "q102": [
+                { start: "19:00", end: "22:00", program: "Q102 Sunday Night" },
+                { start: "22:00", end: "23:59", program: "Late Night Q102" }
+            ],
+            "radio-nova": [
+                { start: "19:00", end: "22:00", program: "End Is Near - Trinkets" },
+                { start: "22:00", end: "23:59", program: "Nova Nights" }
+            ],
+            "spin-1038": [
+                { start: "18:00", end: "23:59", program: "Hit Music Now" }
+            ],
+            "sunshine-106-8": [
+                { start: "19:00", end: "22:00", program: "The Sunday Show - with Ed Finn" },
+                { start: "22:00", end: "23:59", program: "Late Night Sunshine" }
+            ],
+            "c103": [
+                { start: "19:00", end: "22:00", program: "C103 Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night C103" }
+            ],
+            "corks-96fm": [
+                { start: "19:00", end: "22:00", program: "96FM Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night 96FM" }
+            ],
+            "red-fm": [
+                { start: "19:00", end: "22:00", program: "Green on Red With Mags Blackburn" },
+                { start: "22:00", end: "23:59", program: "Red FM Nights" }
+            ],
+            "galway-bay-fm": [
+                { start: "19:00", end: "22:00", program: "The Full Time Whistle" },
+                { start: "22:00", end: "23:59", program: "Galway Bay Late Night" }
+            ],
+            "midwest-radio": [
+                { start: "19:00", end: "22:00", program: "The Sunday Jukebox" },
+                { start: "22:00", end: "23:59", program: "Midwest Music Mix" }
+            ],
+            "ocean-fm": [
+                { start: "19:00", end: "22:00", program: "Cois Na Tine" },
+                { start: "22:00", end: "23:59", program: "Ocean FM Nights" }
+            ],
+            "shannonside-fm": [
+                { start: "19:00", end: "22:00", program: "Sunday Evening Music" },
+                { start: "22:00", end: "23:59", program: "Late Night Shannonside" }
+            ],
+            "east-coast-fm": [
+                { start: "19:00", end: "22:00", program: "East Coast Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night East Coast" }
+            ],
+            "kclr-96fm": [
+                { start: "19:00", end: "22:00", program: "Ceol Anocht with Martin Bridgeman" },
+                { start: "22:00", end: "23:59", program: "KCLR Nights" }
+            ],
+            "kfm": [
+                { start: "19:00", end: "22:00", program: "Kfm Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night Kfm" }
+            ],
+            "lmfm": [
+                { start: "19:00", end: "22:00", program: "LMFM Sunday Night" },
+                { start: "22:00", end: "23:59", program: "Late Night LMFM" }
+            ],
+            "midlands-103": [
+                { start: "19:00", end: "22:00", program: "Midlands Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night Midlands" }
+            ],
+            "south-east-radio": [
+                { start: "19:00", end: "22:00", program: "Radio Sports Hour" },
+                { start: "22:00", end: "23:59", program: "South East Nights" }
+            ],
+            "clare-fm": [
+                { start: "19:00", end: "22:00", program: "The Francis Street Sessions" },
+                { start: "22:00", end: "23:59", program: "Clare FM Nights" }
+            ],
+            "live-95": [
+                { start: "19:00", end: "22:00", program: "Live 95 Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night Live 95" }
+            ],
+            "radio-kerry": [
+                { start: "19:00", end: "22:00", program: "Seven Days with Elaine Kinsella" },
+                { start: "22:00", end: "23:59", program: "Kerry Nights" }
+            ],
+            "tipp-fm": [
+                { start: "19:00", end: "22:00", program: "Ultimate 80s with Peter Connolly" },
+                { start: "22:00", end: "23:59", program: "Tipp FM Nights" }
+            ],
+            "wlr-fm": [
+                { start: "19:00", end: "22:00", program: "Showtime with Wayne Brown" },
+                { start: "22:00", end: "23:59", program: "WLR Nights" }
+            ],
+            "highland-radio": [
+                { start: "19:00", end: "22:00", program: "Jean Curran’s ‘Private Collection’" },
+                { start: "22:00", end: "23:59", program: "Highland Nights" }
+            ],
+            "northern-sound": [
+                { start: "19:00", end: "22:00", program: "Northern Sound Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night Northern Sound" }
+            ],
+            "dundalk-fm": [
+                { start: "19:00", end: "22:00", program: "Dundalk Lion's Club At Your Service" },
+                { start: "22:00", end: "23:59", program: "Dundalk Nights" }
+            ],
+            "dublin-south-fm": [
+                { start: "19:00", end: "23:59", program: "Dublin South Music Mix" }
+            ],
+            "near-fm": [
+                { start: "19:00", end: "23:59", program: "Near FM Music Mix" }
+            ],
+            "raidio-na-life": [
+                { start: "19:00", end: "23:59", program: "Raidió na Life Music Mix" }
+            ],
+            "liffey-sound-fm": [
+                { start: "19:00", end: "23:59", program: "Liffey Sound Music Mix" }
+            ],
+            "flirt-fm": [
+                { start: "19:00", end: "23:59", program: "Flirt FM Music Mix" }
+            ],
+            "wired-fm": [
+                { start: "19:00", end: "23:59", program: "Wired FM Music Mix" }
+            ],
+            "rte-radio-1": [
+                { start: "19:00", end: "22:00", program: "Continental Riffs" },
+                { start: "22:00", end: "23:00", program: "The History Show" },
+                { start: "23:00", end: "23:59", program: "Late Date" }
+            ],
+            "rte-2fm": [
+                { start: "19:00", end: "22:00", program: "2FM Music Mix" },
+                { start: "22:00", end: "23:59", program: "Late Night 2FM" }
+            ],
+            "raidio-na-gaeltachta": [
+                { start: "19:00", end: "22:00", program: "Liza mo Stór agus Scéalta Eile" },
+                { start: "22:00", end: "23:59", program: "RnaG Music Mix" }
+            ],
+            "rte-lyric-fm": [
+                { start: "19:00", end: "22:00", program: "Mystery Train with John Kelly" },
+                { start: "22:00", end: "23:59", program: "Lyric Late Night" }
+            ],
+            "rte-gold": [
+                { start: "19:00", end: "22:00", program: "20th Century Gold" },
+                { start: "22:00", end: "23:59", program: "Gold Nights" }
+            ],
+            "rte-pulse": [
+                { start: "19:00", end: "23:59", program: "Pulse Music Mix" }
+            ],
+            "rte-junior": [
+                { start: "19:00", end: "23:59", program: "The Cosy Corner" }
+            ],
+            "rte-radio-1-extra": [
+                { start: "19:00", end: "23:59", program: "Radio Poland" }
+            ],
+            "rte-2xm": [
+                { start: "19:00", end: "23:59", program: "No Static - Handsome Paddy" }
+            ],
+            "christmas-fm": [
+                { start: "00:00", end: "23:59", program: "Christmas Music Mix" }
+            ],
+            "global-irish-radio": [
+                { start: "19:00", end: "23:59", program: "Ceol agus Craic" }
+            ],
+            "eirewave": [
+                { start: "19:00", end: "23:59", program: "Eirewave Music Mix" }
+            ],
+            "8radio": [
+                { start: "19:00", end: "23:59", program: "8Radio Music Mix" }
+            ],
+            "radio-maria-ireland": [
+                { start: "19:00", end: "23:59", program: "Catholic Mothers/Autistic Stations of the Cross" }
+            ]
+        };
+
+        function getCurrentProgram(slug, currentTime) {
+            const stationSchedule = schedules[slug] || [{ start: "00:00", end: "23:59", program: "Music Mix" }];
+            const now = currentTime.getHours() * 60 + currentTime.getMinutes();
+            
+            for (const { start, end, program } of stationSchedule) {
+                const [startHr, startMin] = start.split(':').map(Number);
+                const [endHr, endMin] = end.split(':').map(Number);
+                const startMins = startHr * 60 + startMin;
+                const endMins = endHr * 60 + endMin;
+                
+                if (endMins < startMins) {
+                    if (now >= startMins || now < endMins) return program;
+                } else if (now >= startMins && now < endMins) {
+                    return program;
+                }
+            }
+            return "Off Air";
+        }
+
+        function updateNowPlaying() {
+            const currentTime = new Date();
+            const gmtOffset = 0; // GMT for Ireland in February
+            currentTime.setHours(currentTime.getHours() + gmtOffset);
+
+            radioCards.forEach(card => {
+                const slug = card.dataset.slug;
+                const status = card.querySelector('.status');
+                if (!card.classList.contains('playing')) {
+                    const program = getCurrentProgram(slug, currentTime);
+                    status.textContent = `Now Playing: ${program}`;
+                }
+            });
+        }
+
+        radioCards.forEach(card => {
+            const audio = card.querySelector('audio');
+            const playBtn = card.querySelector('.play-btn');
+            const status = card.querySelector('.status');
+
+            card.addEventListener('mouseenter', () => {
+                if (currentAudio && currentAudio !== audio) {
+                    pauseCurrentAudio();
+                }
+                hoverTimeout = setTimeout(() => {
+                    status.textContent = 'Loading...';
+                    audio.play().then(() => {
+                        card.classList.add('playing');
+                        status.textContent = 'Playing (Hover)';
+                        currentAudio = audio;
+                    }).catch(err => {
+                        status.textContent = 'Error: ' + err.message;
+                        console.error('Hover playback error:', err);
+                    });
+                }, 300);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                clearTimeout(hoverTimeout);
+                if (audio === currentAudio && !card.classList.contains('clicked')) {
+                    audio.pause();
+                    card.classList.remove('playing');
+                    updateNowPlaying();
+                    currentAudio = null;
+                }
+            });
+
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (audio === currentAudio && !audio.paused) {
+                    audio.pause();
+                    card.classList.remove('playing', 'clicked');
+                    updateNowPlaying();
+                    currentAudio = null;
+                } else {
+                    if (currentAudio && currentAudio !== audio) {
+                        pauseCurrentAudio();
+                    }
+                    status.textContent = 'Loading...';
+                    audio.play().then(() => {
+                        card.classList.add('playing', 'clicked');
+                        status.textContent = 'Playing';
+                        currentAudio = audio;
+                    }).catch(err => {
+                        status.textContent = 'Error: ' + err.message;
+                        console.error('Click playback error:', err);
+                    });
+                }
+            });
+
+            card.addEventListener('click', (e) => {
+                if (e.target !== playBtn) {
+                    openModal(card);
+                }
+            });
+
+            audio.addEventListener('ended', () => {
+                card.classList.remove('playing', 'clicked');
+                updateNowPlaying();
+                currentAudio = null;
+            });
+
+            audio.addEventListener('error', (e) => {
+                status.textContent = 'Error loading stream';
+                console.error('Audio error:', e);
+            });
+        });
+
+        function pauseCurrentAudio() {
+            if (currentAudio) {
+                currentAudio.pause();
+                const currentCard = currentAudio.closest('.radio-card');
+                currentCard.classList.remove('playing', 'clicked');
+                updateNowPlaying();
+                currentAudio = null;
+            }
+            if (modalAudio) {
+                modalAudio.pause();
+            }
+        }
+
+        function openModal(card) {
+            const stationName = card.querySelector('.station-name').textContent;
+            const imgSrc = card.querySelector('img').src;
+            const streamUrl = card.dataset.stream;
+
+            modalStationName.textContent = stationName;
+            modalStationImg.src = imgSrc;
+            modalAudio.src = streamUrl;
+            modal.style.display = 'flex';
+
+            if (currentAudio && currentAudio !== card.querySelector('audio')) {
+                pauseCurrentAudio();
+            }
+        }
+
+        modalClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalAudio.pause();
+            updateNowPlaying();
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                modalAudio.pause();
+                updateNowPlaying();
+            }
+        });
+
+        updateNowPlaying();
+        setInterval(updateNowPlaying, 60000);
+    </script>
+</body>
+</html>
