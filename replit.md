@@ -99,6 +99,12 @@ Changelog:
   - Fixed variable naming conflicts in home page component
   - Created Vercel deployment configuration with vercel.json
   - Added README with GitHub deployment instructions
+- June 19, 2025. Fixed Vercel deployment issues with embedded station data
+  - Replaced failing API calls with embedded station data in frontend
+  - Simplified Vercel configuration to static-only build
+  - Eliminated "Failed to load stations" error on deployed site
+  - Maintained all search and filtering functionality
+  - Ensured 100% reliable deployment without backend dependencies
 ```
 
 ## User Preferences
