@@ -29,11 +29,13 @@ A modern, sleek Irish radio streaming web application featuring authentic radio 
 
 ### Step-by-Step Deployment
 
-1. **Push to GitHub**:
+1. **Download and Push to GitHub**:
+   - Download the latest project files from Replit
+   - Extract and navigate to the project folder
    ```bash
    git init
    git add .
-   git commit -m "Initial commit"
+   git commit -m "IBI Stations - Irish Radio Streaming App"
    git branch -M main
    git remote add origin https://github.com/yourusername/ibi-stations.git
    git push -u origin main
@@ -43,14 +45,15 @@ A modern, sleek Irish radio streaming web application featuring authentic radio 
    - Go to [vercel.com](https://vercel.com)
    - Click "New Project"
    - Import your GitHub repository
-   - Vercel will automatically detect the configuration from `vercel.json`
+   - Vercel will detect the `vercel.json` configuration automatically
+   - The build will use the serverless API functions in the `/api` folder
    - Click "Deploy"
 
-3. **Environment Variables** (if using database):
-   - In Vercel dashboard, go to your project settings
-   - Add environment variables:
-     - `DATABASE_URL` (if using PostgreSQL)
-     - Any other required environment variables
+3. **Configuration Details**:
+   - Frontend builds to `dist/public` using Vite
+   - API endpoints are serverless functions in `/api` folder
+   - No additional environment variables needed for basic functionality
+   - CORS headers are configured for cross-origin requests
 
 ### Configuration Files
 
