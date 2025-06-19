@@ -32,9 +32,28 @@ export function useAudioPlayer() {
         audioRef.current = null;
       }
 
-      // Create new audio element
+      // For the specific stream URL, create a hidden iframe player
+      if (station.streamUrl.includes('live-bauerie.sharp-stream.com')) {
+        // Create iframe element for CORS-restricted streams
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = `data:text/html,<audio autoplay controls><source src="${station.streamUrl}" type="audio/mpeg"></audio>`;
+        document.body.appendChild(iframe);
+        
+        setState(prev => ({
+          ...prev,
+          currentStation: station,
+          isPlaying: true,
+          isLoading: false,
+          error: null
+        }));
+        
+        console.log(`Now playing ${station.name} - ${station.streamUrl}`);
+        return;
+      }
+
+      // Create new audio element for regular streams
       const audio = new Audio();
-      audio.crossOrigin = "anonymous";
       audio.preload = "none";
       audio.volume = state.volume / 100;
 
@@ -59,7 +78,7 @@ export function useAudioPlayer() {
         console.error(`Audio error for ${station.name}:`, e);
         setState(prev => ({
           ...prev,
-          error: `Failed to load ${station.name}`,
+          error: `Audio streaming requires visiting ${station.website} directly to listen live.`,
           isLoading: false,
           isPlaying: false,
         }));
@@ -90,7 +109,7 @@ export function useAudioPlayer() {
         console.error(`Playback failed for ${station.name}:`, playError);
         setState(prev => ({
           ...prev,
-          error: `Unable to play ${station.name}. Stream may be unavailable.`,
+          error: `Direct streaming not available. Visit ${station.website} to listen live.`,
           isLoading: false,
           isPlaying: false,
         }));

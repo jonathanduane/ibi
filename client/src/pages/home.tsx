@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Radio, Music, Newspaper, Star, Grid3X3, List, Settings, Heart, RadioTower, Users, Signal } from "lucide-react";
+import { Search, Radio, Music, Newspaper, Star, Grid3X3, List, Settings, Heart, RadioTower, Users, Signal, ExternalLink } from "lucide-react";
 import { StationCard } from "@/components/station-card";
 import { FloatingPlayer } from "@/components/floating-player";
 import { useAudioPlayer } from "@/hooks/use-audio-player";
@@ -31,7 +31,7 @@ export default function Home() {
         slug: "newstalk",
         frequency: "106-108 FM",
         description: "News & Talk Radio",
-        streamUrl: "https://radio.rte.ie/ieradio1",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/09/Lockup_Raspberry-1.png",
         website: "https://www.newstalk.com",
         genre: "News & Talk",
@@ -46,7 +46,7 @@ export default function Home() {
         slug: "today-fm",
         frequency: "100-102 FM",
         description: "Contemporary Hits",
-        streamUrl: "https://stream.audioxi.com/TFM",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/09/TDFM-LOGO-MAIN.png",
         website: "https://www.todayfm.com",
         genre: "Music",
@@ -61,7 +61,7 @@ export default function Home() {
         slug: "beat-102-103",
         frequency: "102-103 FM",
         description: "South East's Hit Music",
-        streamUrl: "https://stream.audioxi.com/BEAT",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Beat-1.png",
         website: "https://www.beat102103.com",
         genre: "Music",
@@ -76,7 +76,7 @@ export default function Home() {
         slug: "iradio",
         frequency: "105.2 FM",
         description: "Northwest's Choice",
-        streamUrl: "https://stream.audioxi.com/IRADIO",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/iRadio.png",
         website: "https://www.iradio.ie",
         genre: "Music",
@@ -91,7 +91,7 @@ export default function Home() {
         slug: "spin-south-west",
         frequency: "103.1 FM",
         description: "Hit Music Now",
-        streamUrl: "https://stream.audioxi.com/SPINSW",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/08/SPINSW-LOCKUP_MAIN.png",
         website: "https://www.spinsouthwest.com",
         genre: "Music",
@@ -106,7 +106,7 @@ export default function Home() {
         slug: "classic-hits-radio",
         frequency: "96.4 FM",
         description: "Ireland's Classic Hits",
-        streamUrl: "https://stream.audioxi.com/CHITS",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Classic-Hits-FM.png",
         website: "https://www.classichits.ie",
         genre: "Music",
@@ -121,7 +121,7 @@ export default function Home() {
         slug: "spirit-radio",
         frequency: "103.2 FM",
         description: "Christian Radio",
-        streamUrl: "https://www.spiritradio.ie/player/live",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://www.spiritradio.ie/wp-content/uploads/2019/01/sr_logo.png",
         website: "https://www.spiritradio.ie",
         genre: "Christian",
@@ -136,7 +136,7 @@ export default function Home() {
         slug: "98fm",
         frequency: "98.1 FM",
         description: "Dublin's Music Station",
-        streamUrl: "https://stream.audioxi.com/98FM",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://ibireland.ie/wp-content/uploads/2023/09/98-FM.png",
         website: "https://www.98fm.com",
         genre: "Music",
@@ -151,7 +151,7 @@ export default function Home() {
         slug: "fm104",
         frequency: "104.4 FM",
         description: "Dublin's Alternative",
-        streamUrl: "https://stream.audioxi.com/FM104",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
         logoUrl: "https://mmo.aiircdn.com/301/63435a48d085e.png",
         website: "https://www.fm104.ie",
         genre: "Music",
@@ -162,48 +162,258 @@ export default function Home() {
       },
       {
         id: 10,
-        name: "SPIN 1038",
-        slug: "spin-1038",
-        frequency: "103.8 FM",
-        description: "Dublin's Hit Music",
-        streamUrl: "https://stream.audioxi.com/SPIN",
-        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/09/Spin-Logo-main.png",
-        website: "https://www.spin1038.com",
+        name: "Q102",
+        slug: "q102",
+        frequency: "102.2 FM",
+        description: "Dublin's Q102",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://mmo.aiircdn.com/301/67921da01ce24.png",
+        website: "https://www.q102.ie",
         genre: "Music",
         location: "Dublin",
         isActive: true,
-        gradientFrom: "hsl(316, 73%, 52%)",
-        gradientTo: "hsl(266, 85%, 58%)"
+        gradientFrom: "hsl(240, 75%, 55%)",
+        gradientTo: "hsl(250, 80%, 60%)"
       },
       {
         id: 11,
-        name: "RTÉ Radio 1",
-        slug: "rte-radio-1",
-        frequency: "88.2 FM",
-        description: "National Public Radio",
-        streamUrl: "https://www.rte.ie/radio/radioplayer/html5/?station=r1&type=url",
-        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/RTE-Radio-1.png",
-        website: "https://www.rte.ie/radio1",
-        genre: "News & Talk",
+        name: "Radio Nova",
+        slug: "radio-nova",
+        frequency: "100.3 FM",
+        description: "Dublin's Rock Station",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://www.nova.ie/wp-content/uploads/2024/11/main-logo.png",
+        website: "https://www.nova.ie",
+        genre: "Rock",
         location: "Dublin",
+        isActive: true,
+        gradientFrom: "hsl(210, 85%, 35%)",
+        gradientTo: "hsl(220, 90%, 25%)"
+      },
+      {
+        id: 12,
+        name: "Red FM",
+        slug: "red-fm",
+        frequency: "104.5 FM",
+        description: "Cork's Red FM",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Corks-Red-FM.png",
+        website: "https://www.redfm.ie",
+        genre: "Music",
+        location: "Cork",
+        isActive: true,
+        gradientFrom: "hsl(348, 83%, 47%)",
+        gradientTo: "hsl(348, 83%, 35%)"
+      },
+      {
+        id: 13,
+        name: "Galway Bay FM",
+        slug: "galway-bay-fm",
+        frequency: "95.8 FM",
+        description: "Galway's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Galway-Bay.png",
+        website: "https://www.galwaybayfm.ie",
+        genre: "Local",
+        location: "Galway",
+        isActive: true,
+        gradientFrom: "hsl(45, 85%, 50%)",
+        gradientTo: "hsl(50, 90%, 40%)"
+      },
+      {
+        id: 14,
+        name: "MidWest Radio",
+        slug: "midwest-radio",
+        frequency: "96.1 FM",
+        description: "Mayo's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Midwest-Radio.png",
+        website: "https://www.midwestradio.ie",
+        genre: "Local",
+        location: "Mayo",
+        isActive: true,
+        gradientFrom: "hsl(215, 75%, 45%)",
+        gradientTo: "hsl(225, 80%, 35%)"
+      },
+      {
+        id: 15,
+        name: "Ocean FM",
+        slug: "ocean-fm",
+        frequency: "102.5 FM",
+        description: "Northwest Coast",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Ocean-FM.png",
+        website: "https://www.oceanfm.ie",
+        genre: "Music",
+        location: "Sligo",
+        isActive: true,
+        gradientFrom: "hsl(199, 89%, 48%)",
+        gradientTo: "hsl(187, 85%, 53%)"
+      },
+      {
+        id: 16,
+        name: "East Coast FM",
+        slug: "east-coast-fm",
+        frequency: "103.0 FM",
+        description: "Wicklow's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/East-Coast-FM.png",
+        website: "https://www.eastcoast.ie",
+        genre: "Local",
+        location: "Wicklow",
+        isActive: true,
+        gradientFrom: "hsl(195, 85%, 45%)",
+        gradientTo: "hsl(205, 90%, 35%)"
+      },
+      {
+        id: 17,
+        name: "KCLR 96FM",
+        slug: "kclr-96fm",
+        frequency: "96.0 FM",
+        description: "Carlow/Kilkenny Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/KCLR.png",
+        website: "https://www.kclr96fm.com",
+        genre: "Local",
+        location: "Carlow",
+        isActive: true,
+        gradientFrom: "hsl(24, 95%, 53%)",
+        gradientTo: "hsl(348, 83%, 47%)"
+      },
+      {
+        id: 18,
+        name: "Live 95",
+        slug: "live-95",
+        frequency: "95.0 FM",
+        description: "Limerick's Live Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/08/Live-95-Logo-600-x-600.png",
+        website: "https://www.live95fm.ie",
+        genre: "Music",
+        location: "Limerick",
+        isActive: true,
+        gradientFrom: "hsl(328, 85%, 60%)",
+        gradientTo: "hsl(348, 83%, 35%)"
+      },
+      {
+        id: 19,
+        name: "Clare FM",
+        slug: "clare-fm",
+        frequency: "96.4 FM",
+        description: "Clare's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/CLare-FM.png",
+        website: "https://www.clarefm.ie",
+        genre: "Local",
+        location: "Clare",
+        isActive: true,
+        gradientFrom: "hsl(142, 76%, 36%)",
+        gradientTo: "hsl(142, 86%, 28%)"
+      },
+      {
+        id: 20,
+        name: "Highland Radio",
+        slug: "highland-radio",
+        frequency: "103.3 FM",
+        description: "Donegal's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Highland-Radio.png",
+        website: "https://www.highlandradio.com",
+        genre: "Local",
+        location: "Donegal",
+        isActive: true,
+        gradientFrom: "hsl(140, 60%, 40%)",
+        gradientTo: "hsl(160, 70%, 30%)"
+      },
+      {
+        id: 21,
+        name: "Shannonside FM",
+        slug: "shannonside-fm",
+        frequency: "104.1 FM",
+        description: "Longford/Roscommon Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://www.shannonside.ie/images/logo_2x.png",
+        website: "https://www.shannonsidefm.ie",
+        genre: "Local",
+        location: "Longford",
+        isActive: true,
+        gradientFrom: "hsl(210, 79%, 46%)",
+        gradientTo: "hsl(210, 90%, 55%)"
+      },
+      {
+        id: 22,
+        name: "WLR FM",
+        slug: "wlr-fm",
+        frequency: "95.1 FM",
+        description: "Waterford Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/WLR.png",
+        website: "https://www.wlrfm.com",
+        genre: "Local",
+        location: "Waterford",
+        isActive: true,
+        gradientFrom: "hsl(348, 85%, 50%)",
+        gradientTo: "hsl(348, 75%, 35%)"
+      },
+      {
+        id: 23,
+        name: "C103",
+        slug: "c103",
+        frequency: "103.0 FM",
+        description: "Cork's C103",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ourstoprotect.ie/wp-content/uploads/2023/05/C103.png",
+        website: "https://www.c103.ie",
+        genre: "Music",
+        location: "Cork",
+        isActive: true,
+        gradientFrom: "hsl(348, 83%, 47%)",
+        gradientTo: "hsl(0, 84%, 60%)"
+      },
+      {
+        id: 24,
+        name: "Northern Sound",
+        slug: "northern-sound",
+        frequency: "94.8 FM",
+        description: "Cavan/Monaghan Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://www.northernsound.ie/images/logo_2x.png",
+        website: "https://www.northernsound.ie",
+        genre: "Local",
+        location: "Cavan",
         isActive: true,
         gradientFrom: "hsl(210, 79%, 46%)",
         gradientTo: "hsl(227, 100%, 50%)"
       },
       {
-        id: 12,
-        name: "RTÉ 2FM",
-        slug: "rte-2fm",
-        frequency: "90.7 FM",
-        description: "Pop & Rock Music",
-        streamUrl: "https://www.rte.ie/radio/radioplayer/html5/?station=r2&type=url",
-        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/09/2FM-LOGO-main.png",
-        website: "https://www.rte.ie/2fm",
-        genre: "Music",
-        location: "Dublin",
+        id: 25,
+        name: "Tipp FM",
+        slug: "tipp-fm",
+        frequency: "97.1 FM",
+        description: "Tipperary's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Tipp-FM.png",
+        website: "https://www.tippfm.com",
+        genre: "Local",
+        location: "Tipperary",
         isActive: true,
-        gradientFrom: "hsl(45, 93%, 47%)",
-        gradientTo: "hsl(60, 100%, 50%)"
+        gradientFrom: "hsl(142, 76%, 36%)",
+        gradientTo: "hsl(142, 86%, 28%)"
+      },
+      {
+        id: 26,
+        name: "Radio Kerry",
+        slug: "radio-kerry",
+        frequency: "97.0 FM",
+        description: "Kerry's Local Radio",
+        streamUrl: "https://live-bauerie.sharp-stream.com/IRADNW",
+        logoUrl: "https://ibireland.ie/wp-content/uploads/2023/05/Radio-Kerry.png",
+        website: "https://www.radiokerry.ie",
+        genre: "Local",
+        location: "Kerry",
+        isActive: true,
+        gradientFrom: "hsl(140, 60%, 40%)",
+        gradientTo: "hsl(160, 70%, 30%)"
       }
     ];
     return stationsData;
@@ -377,9 +587,21 @@ export default function Home() {
           </div>
 
           {/* Audio Error Display */}
-          {audioError && (
-            <div className="mb-6 p-4 bg-red-600/20 border border-red-600/50 rounded-xl">
-              <p className="text-red-400 text-sm">{audioError}</p>
+          {audioError && currentStation && (
+            <div className="mb-6 p-4 bg-blue-600/20 border border-blue-600/50 rounded-xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-blue-300 text-sm mb-2">{audioError}</p>
+                  <p className="text-blue-200 text-xs">Click "Listen Live" to open {currentStation.name} in a new tab.</p>
+                </div>
+                <Button
+                  onClick={() => currentStation.website && window.open(currentStation.website, '_blank')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                >
+                  <Search className="h-4 w-4" />
+                  Listen Live
+                </Button>
+              </div>
             </div>
           )}
 

@@ -1,111 +1,110 @@
-# IBI Stations - Irish Radio Streaming App
+# IBI Stations - Irish Radio Streaming Platform
 
-A modern, sleek Irish radio streaming web application featuring authentic radio station branding and real-time audio streaming.
+A modern web application for streaming Irish commercial radio stations, featuring authentic branding and real-time audio streaming.
 
 ## Features
 
-- 🎵 Stream live Irish radio stations
-- 📱 Responsive design for mobile and desktop
-- 🎨 Glass-effect UI with authentic station logos
-- 🔍 Search and filter stations by genre
-- ❤️ Favorite stations (future feature)
-- 🎛️ Volume controls and audio visualization
+- 26 authentic Irish commercial radio stations
+- Real-time audio streaming with CORS handling
+- Responsive design for mobile and desktop
+- Search and filter functionality by genre
+- Clean, minimalist interface with authentic station logos
+- Audio visualization and volume controls
 
-## Tech Stack
+## Technology Stack
 
 - **Frontend**: React 18 + TypeScript + Vite
 - **Backend**: Node.js + Express
 - **Database**: PostgreSQL with Drizzle ORM
-- **UI**: Tailwind CSS + shadcn/ui components
+- **Styling**: Tailwind CSS + shadcn/ui components
 - **State Management**: TanStack Query
+- **Routing**: Wouter
 
-## Deployment to Vercel via GitHub
+## Quick Start
 
 ### Prerequisites
 
-1. GitHub account
-2. Vercel account connected to GitHub
-3. This project pushed to a GitHub repository
+- Node.js 18+ 
+- npm or yarn
 
-### Step-by-Step Deployment
+### Installation
 
-1. **Download and Push to GitHub**:
-   - Download the latest project files from Replit
-   - Extract and navigate to the project folder
-   ```bash
-   git init
-   git add .
-   git commit -m "IBI Stations - Irish Radio Streaming App"
-   git branch -M main
-   git remote add origin https://github.com/yourusername/ibi-stations.git
-   git push -u origin main
-   ```
+1. Clone this repository:
+```bash
+git clone <your-repo-url>
+cd ibi-stations
+```
 
-2. **Deploy to Vercel**:
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Vercel will detect the `vercel.json` configuration automatically
-   - The build will use the serverless API functions in the `/api` folder
-   - Click "Deploy"
+2. Install dependencies:
+```bash
+npm install
+```
 
-3. **Configuration Details**:
-   - Frontend builds to `dist/public` using Vite
-   - API endpoints are serverless functions in `/api` folder
-   - No additional environment variables needed for basic functionality
-   - CORS headers are configured for cross-origin requests
+3. Start the development server:
+```bash
+npm run dev
+```
 
-### Configuration Files
+4. Open your browser to `http://localhost:5000`
 
-- `vercel.json` - Vercel deployment configuration
-- `package.json` - Build scripts and dependencies
-- `vite.config.ts` - Frontend build configuration
+## Deployment
 
-### Local Development
+### Vercel Deployment (Recommended)
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+1. Push your code to GitHub
+2. Connect your GitHub repository to [Vercel](https://vercel.com)
+3. Vercel will automatically detect the configuration and deploy
+4. Your app will be live at `https://your-app.vercel.app`
 
-2. **Start development server**:
-   ```bash
-   npm run dev
-   ```
+### Manual Build
 
-3. **Build for production**:
-   ```bash
-   npm run build
-   ```
+```bash
+npm run build
+npm run start
+```
 
 ## Project Structure
 
 ```
-├── client/          # React frontend
+├── client/                 # React frontend
 │   ├── src/
-│   │   ├── components/  # Reusable UI components
-│   │   ├── hooks/       # Custom React hooks
-│   │   ├── lib/         # Utilities and configurations
-│   │   └── pages/       # Page components
-├── server/          # Express backend
-│   ├── index.ts     # Server entry point
-│   ├── routes.ts    # API routes
-│   └── storage.ts   # Data storage layer
-├── shared/          # Shared types and schemas
-└── vercel.json      # Vercel deployment config
+│   │   ├── components/    # Reusable UI components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── lib/           # Utilities and configurations
+│   │   └── pages/         # Application pages
+├── server/                # Express backend
+├── shared/                # Shared types and schemas
+└── deployment files...
 ```
+
+## Radio Stations
+
+The application features 26 authentic Irish commercial radio stations from Independent Broadcasters of Ireland (IBI), including:
+
+- Newstalk (News & Talk)
+- Today FM (Contemporary Music)
+- Beat 102 103 (Southeast Radio)
+- iRadio (Northeast Radio)
+- SPIN South West
+- Classic Hits Radio
+- And many more...
 
 ## Audio Streaming
 
-The app uses HTML5 audio elements to stream live radio. Some streams may require specific CORS headers or may not be available for web playback due to licensing restrictions.
+The application uses advanced CORS handling to stream audio from Irish radio stations. Due to browser security restrictions, some streams may require direct navigation to station websites for full functionality.
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Submit a pull request
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
-MIT License
+This project is for educational and demonstration purposes. All radio station logos and branding are property of their respective owners.
+
+## Support
+
+For issues or questions, please open a GitHub issue.
